@@ -1,0 +1,44 @@
+extends ../layout/default.pug
+//- block header
+block content
+  script(src="https://unpkg.com/axios/dist/axios.min.js")
+  .jumborton
+    if list
+      h1 게시글 수정
+        small (update)
+    else
+      h1 게시글 작성
+        small (write)
+    //- .container(style="border : 1px solid red;")
+    .container
+      form(action="#" name="wrForm" method="post" onsubmit="return onSubmit(this);" enctype="multipart/form-data")
+        if list
+          input(type="hidden" name="id" value=`${list.id}`)
+        ul.wr-lists
+          li.wr-list.d-flex
+            .title.p-3.bg-dark.text-light 제목
+            .content.p-1
+              input.form-control(type="text" name="title" placeholder="제목을 작성해 주세요." value=`${list ? list.title : ''}`)
+          li.wr-list.d-flex
+            .title.p-3.bg-dark.text-light 작성자
+            .content.p-1
+              input.form-control(type="text" name="writer" placeholder="작성자를 작성해 주세요." value=`${list ? list.writer : ''}`)
+          li.wr-list.d-flex
+            .title.p-3.bg-dark.text-light 내용
+            .content.p-1
+              textarea.form-control(name="comment" placeholder="내용을 작성해 주세요.")= `${list? list.comment : ''}`
+          li.wr-list.d-flex
+            .title.p-3.bg-dark.text-light 첨부파일
+            .content.p-1
+              if list && list.savename
+                div.savefile
+                  span= list.oriname
+                  span.bt-delete.fa.fa-times(onclick=`rmFile(${list.id})`)
+              input.form-control-file(type="file" name="upfile" placeholder="첨부파일" multiple)
+              .file-comment.text-danger * jpg, gif, png, pdf, txt, zip 파일만 업로드가 가능합니다.
+          li.text-center.p-3
+            if list
+              button.btn.btn-success 수정
+            else
+              button.btn.btn-primary 저장
+              button(type="reset").btn.btn-danger 다시작성
